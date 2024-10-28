@@ -24,15 +24,15 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.CacheableTransformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
-import shadow.org.apache.tools.zip.ZipEntry
-import shadow.org.apache.tools.zip.ZipOutputStream
+import org.apache.tools.zip.ZipEntry
+import org.apache.tools.zip.ZipOutputStream
 
 import java.nio.file.Paths
 
 plugins {
     id('java-library')
     id('maven-publish')
-    id('com.github.johnrengelman.shadow') version '6.1.0'
+    id('com.gradleup.shadow') version '8.3.0'
 }
 
 group 'org.apache.cassandra.sidecar'
@@ -56,11 +56,11 @@ tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
     reports {
-        junitXml.enabled = true
+        junitXml.setRequired(true)
         def destDir = Paths.get(rootProject.rootDir.absolutePath, "build", "test-results", "vertx-client-shaded").toFile()
         println("Destination directory for vertx-client-shaded tests: ${destDir}")
-        junitXml.destination = destDir
-        html.enabled = true
+        junitXml.getOutputLocation().set(destDir)
+        html.setRequired(true)
     }
 }
 

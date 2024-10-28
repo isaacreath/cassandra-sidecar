@@ -198,11 +198,11 @@ test {
         jvmArgs "-XX:-MaxFDLimit"
     }
     reports {
-        junitXml.enabled = true
+        junitXml.setRequired(true)
         def destDir = Paths.get(rootProject.rootDir.absolutePath, "build", "test-results", "test").toFile()
         println("Destination directory for unit tests: ${destDir}")
-        junitXml.destination = destDir
-        html.enabled = true
+        junitXml.getOutputLocation().set(destDir)
+        html.setRequired(true)
     }
     testLogging {
         events "passed", "skipped", "failed"
@@ -261,11 +261,11 @@ def integrationTest = task("integrationTest")
         }
 
         reports {
-            junitXml.enabled = true
+            junitXml.setRequired(true)
             def destDir = Paths.get(rootProject.rootDir.absolutePath, "build", "test-results", "integration").toFile()
             println("Destination directory for integration tests: ${destDir}")
-            junitXml.destination = destDir
-            html.enabled = true
+            junitXml.getOutputLocation().set(destDir)
+            html.setRequired(true)
         }
         testLogging {
             events "started", "passed", "skipped", "failed"
@@ -301,11 +301,11 @@ tasks.register("containerTest", Test) {
 
     useJUnitPlatform()
     reports {
-        junitXml.enabled = true
+        junitXml.setRequired(true)
         def destDir = Paths.get(rootProject.rootDir.absolutePath, "build", "test-results", "containerTest").toFile()
         println("Destination directory for testcontainer tests: ${destDir}")
-        junitXml.destination = destDir
-        html.enabled = true
+        junitXml.getOutputLocation().set(destDir)
+        html.setRequired(true)
     }
     testLogging {
         events "passed", "skipped", "failed"

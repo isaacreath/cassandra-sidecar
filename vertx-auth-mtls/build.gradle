@@ -34,11 +34,11 @@ test {
     useJUnitPlatform()
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     reports {
-        junitXml.enabled = true
+        junitXml.setRequired(true)
         def destDir = Paths.get(rootProject.rootDir.absolutePath, "build", "test-results", "vertx-auth-mtls").toFile()
         println("Destination directory for vertx-auth-mtls tests: ${destDir}")
-        junitXml.destination = destDir
-        html.enabled = true
+        junitXml.getOutputLocation().set(destDir)
+        html.setRequired(true)
     }
 }
 

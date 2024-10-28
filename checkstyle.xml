@@ -124,8 +124,10 @@ page at http://checkstyle.sourceforge.net/config.html -->
 
         -->
 
-        <!-- Checks for Javadoc comments.                     -->
-        <!-- See http://checkstyle.sf.net/config_javadoc.html -->
+        <!-- Checks for Javadoc comments.                                                           -->
+        <!-- See https://checkstyle.sourceforge.io/version/7.8.1/config_javadoc.html#JavadocMethod  -->
+        <!-- Class loading has been removed from JavadocMethod in checkstyle 8.28                   -->
+        <!-- See https://github.com/checkstyle/checkstyle/issues/7329 for more info                 -->
         <module name="JavadocMethod">
             <property name="scope" value="protected" />
             <property name="severity" value="error" />
@@ -135,6 +137,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
             <property name="allowMissingThrowsTags" value="true" />
             <property name="allowThrowsTagsForSubclasses" value="true" />
             <property name="allowUndeclaredRTE" value="true" />
+            <property name="suppressLoadErrors" value="true" />
         </module>
 
         <module name="JavadocType">
