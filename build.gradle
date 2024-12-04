@@ -111,7 +111,7 @@ application {
 startScripts {
     doLast {
         // Config file location should be in file:/// format for local files,
-        def confFile = "file:" + File.separator + File.separator + "\${APP_HOME}/conf/sidecar.yaml"
+        def confFileUnix = "file:" + File.separator + File.separator + "\${APP_HOME}/conf/sidecar.yaml"
 
         // As of Gradle version 7.2, the generated bin/cassandra-sidecar file by default is configured to not allow
         // shell fragments. Thus, variables like APP_HOME are treated as literals, which prevents us from being able to
@@ -126,13 +126,22 @@ startScripts {
         // Replacing the placeholder after the script has been generated will preserve the semantics from Gradle < 7.2.
         // See this Gradle issue for more context: https://github.com/gradle/gradle/issues/18170.
 
-        var defaultJvmOpts = ["-Dsidecar.logdir=./logs",
-                              "-Dsidecar.config=" + confFile,
+        def defaultJvmOptsUnix = ["-Dsidecar.logdir=./logs",
+                              "-Dsidecar.config=" + confFileUnix,
                               "-Dlogback.configurationFile=./conf/logback.xml",
                               "-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory",
                               "-javaagent:\${APP_HOME}/agents/jolokia-jvm-1.6.0-agent.jar=port=7777,host=localhost"]
-        var defaultJvmOptsValue = defaultJvmOpts.join(" ")
-        unixScript.text = unixScript.text.replace("DEFAULT_JVM_OPTS='\"PLACEHOLDER\"'", "DEFAULT_JVM_OPTS=\"${defaultJvmOptsValue}\"")
+        def defaultJvmOptsUnixValue = defaultJvmOptsUnix.join(" ")
+        unixScript.text = unixScript.text.replace("DEFAULT_JVM_OPTS='\"PLACEHOLDER\"'", "DEFAULT_JVM_OPTS=\"${defaultJvmOptsUnixValue}\"")
+
+        def confFileWindows = "file:" + File.separator + File.separator + "%APP_HOME%/conf/sidecar.yaml"
+        def defaultJvmOptsWindows = ["-Dsidecar.logdir=./logs",
+                                  "-Dsidecar.config=" + confFileWindows,
+                                  "-Dlogback.configurationFile=./conf/logback.xml",
+                                  "-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory",
+                                  "-javaagent:%APP_HOME%/agents/jolokia-jvm-1.6.0-agent.jar=port=7777,host=localhost"]
+        def defaultJvmOptsWindowsValue = defaultJvmOptsWindows.join(" ")
+        windowsScript.text = windowsScript.text.replace("set DEFAULT_JVM_OPTS=\"PLACEHOLDER\"", "set DEFAULT_JVM_OPTS=\"${defaultJvmOptsWindowsValue}\"")
     }
 }
 
