@@ -38,7 +38,7 @@ plugins {
     id 'application'
 
     // since we're using a specific version here, we delay applying the plugin till the all projects
-    id "com.github.spotbugs" version "5.0.14" apply false
+    id "com.github.spotbugs" version "6.0.20" apply false
 
     // https://github.com/nebula-plugins/gradle-ospackage-plugin/wiki
     id "com.netflix.nebula.ospackage" version "11.10.0"
@@ -73,14 +73,6 @@ allprojects {
     spotbugs {
         toolVersion = '4.2.3'
         excludeFilter = file("${project.rootDir}/spotbugs-exclude.xml")
-    }
-
-    tasks.withType(SpotBugsTask) {
-        reports {
-          html {
-            required.set(true)
-          }
-        }
     }
 
     codeCheckTasks.dependsOn(tasks.withType(Checkstyle))
@@ -159,6 +151,7 @@ distributions {
             from('conf') {
                 into('conf')
             }
+            setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
         }
     }
 }
@@ -198,11 +191,14 @@ tasks.named('idea').configure {
     dependsOn copyIdeaSettings
 }
 
-tasks.register('copyJolokia', Copy) {
-    into "$projectDir"
-
-    into("agents") {
-        from configurations.jolokia
+tasks.register('copyJolokia') {
+    doLast {
+        copy {
+            into "$projectDir"
+            into("agents") {
+                from configurations.jolokia
+            }
+        }
     }
 }
 
