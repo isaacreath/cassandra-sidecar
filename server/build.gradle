@@ -29,7 +29,7 @@ plugins {
     // and is published
     id('maven-publish')
     // and produces a docker image
-    id('com.google.cloud.tools.jib') version '2.2.0'
+    id('com.google.cloud.tools.jib') version '3.4.4'
 }
 
 sourceCompatibility = 1.8
@@ -314,6 +314,15 @@ tasks.register("containerTest", Test) {
     classpath = sourceSets.containerTest.runtimeClasspath
     shouldRunAfter test
     finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jib {
+    from {
+        image = 'gcr.io/distroless/java11-debian11@sha256:56ffee16297ae1d3484bd47575cacd8102e5ba2be425a7772b3f8ad0d48def3b'
+    }
+    to {
+        image = "cassandra-sidecar:${project.version}"
+    }
 }
 
 compileIntegrationTestJava.onlyIf { "true" != System.getenv("skipIntegrationTest") }
